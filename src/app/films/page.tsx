@@ -34,7 +34,7 @@ export default function FilmsPage() {
   const [selectedTool, setSelectedTool] = useState('all');
 
   const categories = ['all', 'Sci-Fi', 'Abstract', 'Documentary', 'Experimental', 'Animation'];
-  const aiTools = ['all', 'Runway ML', 'Pika Labs', 'Sora', 'MidJourney', 'Stable Video'];
+ const aiTools = ['all', 'Runway ML', 'Pika Labs', 'Sora', 'MidJourney', 'Stable Video', 'Kling 1.6', 'ComfyUI'];
 
   // Mock data - später durch Supabase ersetzen
  // Echte Daten von Supabase laden
@@ -53,7 +53,7 @@ useEffect(() => {
   views: 0,                  // ← Diese Zeile hinzufügen
   featured: true,
   uploadDate: '2024-12-01'   // ← Diese Zeile hinzufügen
-},,
+},
     {
       id: '2',
       title: 'Synthetic Memories',
