@@ -3,65 +3,98 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { supabase } from '../../../lib/supabase';
-import { AIFilm } from '../../../lib/types';
 
-// Proper Icon Components (replace emoji with proper icons)
+// Import Icons from lucide-react
 import { ArrowLeft, Play, Clock, User, Calendar, Eye, Share2, Film, ExternalLink } from 'lucide-react';
+
+interface AIFilm {
+  id: string;
+  title: string;
+  creator: string;
+  thumbnail_url: string;
+  video_url: string;
+  duration: string;
+  description: string;
+  ai_tools: string[];
+  category: string;
+  views: number;
+  featured: boolean;
+  created_at: string;
+  status?: string;
+}
 
 export default function FilmDetailPage() {
   const params = useParams();
   const [film, setFilm] = useState<AIFilm | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [relatedFilms, setRelatedFilms] = useState<AIFilm[]>([]);
+
+  // Mock data that matches your homepage
+  const mockFilms: AIFilm[] = [
+    {
+      id: 'yoda-trailer-2024',
+      title: 'Yoda - AI Generated Star Wars Trailer',
+      creator: 'Ludwig Kienle',
+      thumbnail_url: 'https://img.youtube.com/vi/-4yRa_mhlwc/maxresdefault.jpg',
+      video_url: 'https://youtu.be/-4yRa_mhlwc',
+      duration: '1:30',
+      description: 'Professional AI-generated Star Wars trailer featuring Yoda. Created with cutting-edge AI tools showcasing the potential of AI in film production. This trailer demonstrates the impressive capabilities of Kling 1.6 for video generation, combined with the precision of ComfyUI workflows and high-quality visual concepts from MidJourney.',
+      ai_tools: ['Kling 1.6', 'ComfyUI', 'MidJourney'],
+      category: 'Sci-Fi',
+      views: 1250,
+      featured: true,
+      created_at: '2024-12-01T10:00:00Z',
+      status: 'approved'
+    },
+    {
+      id: 'digital-dreams',
+      title: 'Digital Dreams',
+      creator: 'Sarah Chen',
+      thumbnail_url: 'https://picsum.photos/400/225?random=1',
+      video_url: 'https://www.youtube.com/watch?v=example1',
+      duration: '3:42',
+      description: 'A surreal short film exploring AI-generated dreams and digital worlds through stunning visuals.',
+      ai_tools: ['Runway ML', 'MidJourney'],
+      category: 'Abstract',
+      views: 2840,
+      featured: true,
+      created_at: '2024-11-15T10:00:00Z',
+      status: 'approved'
+    },
+    {
+      id: 'synthetic-memories',
+      title: 'Synthetic Memories',
+      creator: 'Alex Rivera',
+      thumbnail_url: 'https://picsum.photos/400/225?random=2',
+      video_url: 'https://www.youtube.com/watch?v=example2',
+      duration: '5:18',
+      description: 'A poetic journey through artificial memories in a digital future.',
+      ai_tools: ['Pika Labs', 'Stable Video'],
+      category: 'Sci-Fi',
+      views: 1876,
+      featured: true,
+      created_at: '2024-11-20T10:00:00Z',
+      status: 'approved'
+    }
+  ];
 
   useEffect(() => {
-    const fetchFilm = async () => {
-      try {
-        const filmId = params.id as string;
-        
-        // Fetch the specific film
-        const { data: filmData, error: filmError } = await supabase
-          .from('films')
-          .select('*')
-          .eq('id', filmId)
-          .single();
-
-        if (filmError) {
-          setError('Film nicht gefunden');
-          setLoading(false);
-          return;
-        }
-
-        setFilm(filmData);
-
-        // Fetch related films (same category, different film)
-        const { data: relatedData } = await supabase
-          .from('films')
-          .select('*')
-          .eq('category', filmData.category)
-          .neq('id', filmId)
-          .limit(3);
-
-        if (relatedData) {
-          setRelatedFilms(relatedData);
-        }
-
-        // Increment view count
-        await supabase
-          .from('films')
-          .update({ views: (filmData.views || 0) + 1 })
-          .eq('id', filmId);
-
-      } catch (err) {
-        setError('Fehler beim Laden des Films');
-      } finally {
-        setLoading(false);
+    const filmId = params.id as string;
+    
+    // Simulate loading time
+    setTimeout(() => {
+      const foundFilm = mockFilms.find(f => f.id === filmId);
+      
+      if (foundFilm) {
+        setFilm(foundFilm);
+        // Simulate view increment
+        foundFilm.views += 1;
+      } else {
+        setError('Film not found');
       }
-    };
-
-    fetchFilm();
+      
+      setLoading(false);
+    }, 500);
   }, [params.id]);
 
   const shareFilm = async (platform: string) => {
@@ -78,9 +111,9 @@ export default function FilmDetailPage() {
       case 'copy':
         try {
           await navigator.clipboard.writeText(url);
-          alert('Link kopiert!');
+          alert('Link copied!');
         } catch (err) {
-          console.error('Fehler beim Kopieren:', err);
+          alert(`Link: ${url}`);
         }
         break;
     }
@@ -99,14 +132,14 @@ export default function FilmDetailPage() {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white mb-4">
-            {error || 'Film nicht gefunden'}
+            {error || 'Film not found'}
           </h1>
           <Link 
             href="/films" 
             className="inline-flex items-center text-amber-400 hover:text-amber-300 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück zur Übersicht
+            Back to Films
           </Link>
         </div>
       </div>
@@ -150,7 +183,7 @@ export default function FilmDetailPage() {
           className="inline-flex items-center text-amber-400 hover:text-amber-300 mb-6 transition-colors group"
         >
           <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
-          Zurück zur Übersicht
+          Back to Films
         </Link>
 
         {/* Video Player */}
@@ -168,7 +201,7 @@ export default function FilmDetailPage() {
               <div className="w-full h-full flex items-center justify-center text-white bg-gradient-to-br from-gray-800 to-gray-900">
                 <div className="text-center">
                   <Play className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                  <p className="text-lg">Video nicht verfügbar</p>
+                  <p className="text-lg">Video not available</p>
                   {film.video_url && (
                     <a 
                       href={film.video_url} 
@@ -176,7 +209,7 @@ export default function FilmDetailPage() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center mt-4 text-amber-400 hover:text-amber-300"
                     >
-                      Video extern öffnen <ExternalLink className="w-4 h-4 ml-2" />
+                      Open video externally <ExternalLink className="w-4 h-4 ml-2" />
                     </a>
                   )}
                 </div>
@@ -204,18 +237,18 @@ export default function FilmDetailPage() {
                 </div>
                 <div className="flex items-center">
                   <Calendar className="w-4 h-4 mr-2" />
-                  <span>{new Date(film.created_at).toLocaleDateString('de-DE')}</span>
+                  <span>{new Date(film.created_at).toLocaleDateString()}</span>
                 </div>
                 <div className="flex items-center">
                   <Eye className="w-4 h-4 mr-2" />
-                  <span>{(film.views || 0).toLocaleString()} Views</span>
+                  <span>{film.views.toLocaleString()} views</span>
                 </div>
               </div>
             </div>
 
             {/* Description */}
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-              <h2 className="text-xl font-semibold text-white mb-4">Beschreibung</h2>
+              <h2 className="text-xl font-semibold text-white mb-4">Description</h2>
               <p className="text-gray-300 leading-relaxed whitespace-pre-line">
                 {film.description}
               </p>
@@ -225,7 +258,7 @@ export default function FilmDetailPage() {
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center">
                 <Share2 className="w-5 h-5 mr-2" />
-                Teilen
+                Share
               </h2>
               <div className="flex gap-4 flex-wrap">
                 <button 
@@ -244,7 +277,7 @@ export default function FilmDetailPage() {
                   onClick={() => shareFilm('copy')}
                   className="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded-lg text-white transition-colors"
                 >
-                  Link kopieren
+                  Copy Link
                 </button>
               </div>
             </div>
@@ -254,13 +287,13 @@ export default function FilmDetailPage() {
           <div className="space-y-6">
             {/* AI Tools */}
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-              <h2 className="text-xl font-semibold text-white mb-4">KI-Tools verwendet</h2>
+              <h2 className="text-xl font-semibold text-white mb-4">AI Tools Used</h2>
               <div className="space-y-3">
                 {film.ai_tools?.map((tool, index) => (
                   <div key={index} className="bg-gradient-to-r from-amber-600/20 to-amber-500/20 border border-amber-600/30 rounded-lg p-3">
                     <span className="text-amber-400 font-medium">{tool}</span>
                   </div>
-                )) || <p className="text-gray-400">Keine Tools angegeben</p>}
+                ))}
               </div>
             </div>
 
@@ -269,16 +302,16 @@ export default function FilmDetailPage() {
               <h2 className="text-xl font-semibold text-white mb-4">Details</h2>
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-gray-300">Kategorie:</span>
+                  <span className="text-gray-300">Category:</span>
                   <span className="text-amber-400 font-medium">{film.category}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-300">Dauer:</span>
+                  <span className="text-gray-300">Duration:</span>
                   <span className="text-white">{film.duration}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-300">Featured:</span>
-                  <span className="text-white">{film.featured ? '⭐ Ja' : 'Nein'}</span>
+                  <span className="text-white">{film.featured ? '⭐ Yes' : 'No'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-300">Status:</span>
@@ -286,36 +319,6 @@ export default function FilmDetailPage() {
                 </div>
               </div>
             </div>
-
-            {/* Related Films */}
-            {relatedFilms.length > 0 && (
-              <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                <h2 className="text-xl font-semibold text-white mb-4">Ähnliche Filme</h2>
-                <div className="space-y-4">
-                  {relatedFilms.map((relatedFilm) => (
-                    <Link 
-                      key={relatedFilm.id} 
-                      href={`/films/${relatedFilm.id}`}
-                      className="block group"
-                    >
-                      <div className="flex space-x-3">
-                        <img 
-                          src={relatedFilm.thumbnail_url} 
-                          alt={relatedFilm.title}
-                          className="w-16 h-9 object-cover rounded group-hover:opacity-80 transition-opacity"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-white text-sm font-medium group-hover:text-amber-400 transition-colors line-clamp-2">
-                            {relatedFilm.title}
-                          </h3>
-                          <p className="text-gray-400 text-xs mt-1">{relatedFilm.creator}</p>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
