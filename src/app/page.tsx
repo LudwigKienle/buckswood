@@ -3,9 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-// Supabase direkt einbauen (ohne externes Package)
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
 
 // Emoji Icons definieren
 const Play = ({ className }: { className?: string }) => <span className={className}>▶️</span>;
