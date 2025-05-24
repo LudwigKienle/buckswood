@@ -1,100 +1,252 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+
+// Supabase direkt einbauen (ohne externes Package)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+// Emoji Icons definieren
+const Play = ({ className }: { className?: string }) => <span className={className}>▶️</span>;
+const Film = ({ className }: { className?: string }) => <span className={className}>🎬</span>;
+const Users = ({ className }: { className?: string }) => <span className={className}>👥</span>;
+const Award = ({ className }: { className?: string }) => <span className={className}>🏆</span>;
+const ArrowRight = ({ className }: { className?: string }) => <span className={className}>→</span>;
+
+interface AIFilm {
+  id: string;
+  title: string;
+  creator: string;
+  thumbnail_url: string;
+  duration: string;
+  description: string;
+  ai_tools: string[];
+  featured: boolean;
+}
+
+export default function HomePage() {
+  const [featuredFilms, setFeaturedFilms] = useState<AIFilm[]>([]);
+
+  // Mock data - später durch Supabase ersetzen
+ // Echte Daten von Supabase laden
+// Mock data für jetzt (funktioniert garantiert)
+useEffect(() => {
+  const mockFilms = [
+    {
+      id: '1',
+      title: 'Digital Dreams',
+      creator: 'Sarah Chen',
+      thumbnail_url: 'https://picsum.photos/400/225?random=1',
+      duration: '3:42',
+      description: 'Ein surrealer Kurzfilm über KI-generierte Träume',
+      ai_tools: ['Runway ML', 'MidJourney'],
+      featured: true
+    },
+    {
+      id: '2',
+      title: 'Synthetic Memories',
+      creator: 'Alex Rivera',
+      thumbnail_url: 'https://picsum.photos/400/225?random=2',
+      duration: '5:18',
+      description: 'Eine poetische Reise durch künstliche Erinnerungen',
+      ai_tools: ['Pika Labs', 'Stable Video'],
+      featured: true
+    },
+    {
+      id: '3',
+      title: 'The Last Algorithm',
+      creator: 'Maya Patel',
+      thumbnail_url: 'https://picsum.photos/400/225?random=3',
+      duration: '7:23',
+      description: 'Science Fiction Drama über die letzte KI',
+      ai_tools: ['Sora', 'DALL-E 3'],
+      featured: true
+    }
+  ];
+  setFeaturedFilms(mockFilms);
+}, []);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Header */}
+      <header className="bg-black/20 backdrop-blur-sm border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-amber-600 to-amber-400 rounded-lg flex items-center justify-center">
+                <Film className="w-6 h-6 text-white" />
+              </div>
+              <h1 className="text-2xl font-bold text-white">Buckswood</h1>
+            </div>
+            <nav className="hidden md:flex space-x-8">
+              <Link href="/films" className="text-gray-300 hover:text-white transition-colors">Films</Link>
+              <Link href="/creators" className="text-gray-300 hover:text-white transition-colors">Creators</Link>
+              <Link href="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
+              <Link href="/submit" className="bg-amber-600 hover:bg-amber-700 px-4 py-2 rounded-lg text-white transition-colors">Submit Film</Link>
+            </nav>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </header>
+
+      {/* Hero Section */}
+      <section className="relative overflow-hidden py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl md:text-7xl font-bold text-white mb-6">
+              Where AI Meets{' '}
+              <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent">
+                Cinema
+              </span>
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+              Entdecken Sie die Zukunft des Filmemachens. Kuratierte KI-generierte Filme von visionären Künstlern aus aller Welt.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/films" className="bg-white text-black px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center">
+                <Play className="w-5 h-5 mr-2" />
+                Films entdecken
+              </Link>
+              <Link href="/about" className="border border-white/20 text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors">
+                Mehr erfahren
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Films */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center mb-12">
+            <h3 className="text-3xl font-bold text-white">Featured Films</h3>
+            <Link href="/films" className="text-amber-400 hover:text-amber-300 flex items-center">
+              Alle ansehen <ArrowRight className="w-4 h-4 ml-1" />
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {featuredFilms.map((film) => (
+              <div key={film.id} className="bg-white/5 backdrop-blur-sm rounded-xl overflow-hidden hover:bg-white/10 transition-all duration-300 group">
+                <div className="relative">
+                  <img 
+                    src={film.thumbnail_url} 
+                    alt={film.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <Play className="w-12 h-12 text-white" />
+                  </div>
+                  <div className="absolute top-3 right-3 bg-black/70 px-2 py-1 rounded text-white text-sm">
+                    {film.duration}
+                  </div>
+                </div>
+                
+                <div className="p-6">
+                  <h4 className="text-xl font-semibold text-white mb-2">{film.title}</h4>
+                  <p className="text-amber-400 text-sm mb-3">von {film.creator}</p>
+                  <p className="text-gray-300 text-sm mb-4">{film.description}</p>
+                  
+                  <div className="flex flex-wrap gap-2">
+                    {film.ai_tools.map((tool, index) => (
+                      <span key={index} className="bg-white/10 px-2 py-1 rounded text-xs text-gray-300">
+                        {tool}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-16 bg-black/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div className="flex flex-col items-center">
+              <Film className="w-12 h-12 text-amber-400 mb-4" />
+              <h3 className="text-3xl font-bold text-white mb-2">150+</h3>
+              <p className="text-gray-300">Kuratierte KI-Filme</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <Users className="w-12 h-12 text-amber-400 mb-4" />
+              <h3 className="text-3xl font-bold text-white mb-2">50+</h3>
+              <p className="text-gray-300">Kreative Künstler</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <Award className="w-12 h-12 text-amber-400 mb-4" />
+              <h3 className="text-3xl font-bold text-white mb-2">10</h3>
+              <p className="text-gray-300">Länder vertreten</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h3 className="text-4xl font-bold text-white mb-6">
+            Sind Sie ein KI-Filmemacher?
+          </h3>
+          <p className="text-xl text-gray-300 mb-8">
+            Werden Sie Teil unserer wachsenden Community und zeigen Sie Ihre Arbeit einem globalen Publikum.
+          </p>
+          <Link href="/submit" className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 px-8 py-4 rounded-lg text-white font-semibold text-lg transition-all">
+            Film einreichen
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-black/40 border-t border-white/10 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-8 h-8 bg-gradient-to-r from-amber-600 to-amber-400 rounded-lg flex items-center justify-center">
+                  <Film className="w-5 h-5 text-white" />
+                </div>
+                <h4 className="text-lg font-bold text-white">Buckswood</h4>
+              </div>
+              <p className="text-gray-400 text-sm">
+                Die Plattform für KI-generierte Filme und visuelle Geschichten.
+              </p>
+            </div>
+            
+            <div>
+              <h5 className="text-white font-semibold mb-4">Platform</h5>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><Link href="/films" className="hover:text-white transition-colors">Filme</Link></li>
+                <li><Link href="/creators" className="hover:text-white transition-colors">Künstler</Link></li>
+                <li><Link href="/submit" className="hover:text-white transition-colors">Film einreichen</Link></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h5 className="text-white font-semibold mb-4">Community</h5>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><Link href="/blog" className="hover:text-white transition-colors">Blog</Link></li>
+                <li><Link href="/events" className="hover:text-white transition-colors">Events</Link></li>
+                <li><Link href="/newsletter" className="hover:text-white transition-colors">Newsletter</Link></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h5 className="text-white font-semibold mb-4">Support</h5>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><Link href="/help" className="hover:text-white transition-colors">Hilfe</Link></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">Kontakt</Link></li>
+                <li><Link href="/privacy" className="hover:text-white transition-colors">Datenschutz</Link></li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="border-t border-white/10 mt-8 pt-8 text-center text-gray-400 text-sm">
+            <p>&copy; 2025 Buckswood. Alle Rechte vorbehalten.</p>
+          </div>
+        </div>
       </footer>
     </div>
   );
