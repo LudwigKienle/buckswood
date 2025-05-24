@@ -31,16 +31,17 @@ export default function HomePage() {
 // Mock data für jetzt (funktioniert garantiert)
 useEffect(() => {
   const mockFilms = [
+    
     {
-      id: '1',
-      title: 'Digital Dreams',
-      creator: 'Sarah Chen',
-      thumbnail_url: 'https://picsum.photos/400/225?random=1',
-      duration: '3:42',
-      description: 'Ein surrealer Kurzfilm über KI-generierte Träume',
-      ai_tools: ['Runway ML', 'MidJourney'],
-      featured: true
-    },
+  id: 'yoda-trailer-2024',
+  title: 'Yoda - KI-generierter Star Wars Trailer',
+  creator: 'Ludwig Kienle',
+  thumbnail_url: 'https://img.youtube.com/vi/-4yRa_mhlwc/maxresdefault.jpg',
+  duration: '1:30',
+  description: 'Professioneller KI-generierter Star Wars Trailer mit Yoda im Fokus. Erstellt mit modernsten AI-Tools und zeigt das Potenzial von KI in der Filmproduktion.',
+  ai_tools: ['Kling 1.6', 'ComfyUI', 'MidJourney'],
+  featured: true
+},
     {
       id: '2',
       title: 'Synthetic Memories',
