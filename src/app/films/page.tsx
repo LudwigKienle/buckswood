@@ -40,31 +40,91 @@ export default function FilmsPage() {
 
   // Mock data - später durch Supabase ersetzen
  // Echte Daten von Supabase laden
+// Mock data (funktioniert garantiert)
 useEffect(() => {
-  const fetchFilms = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('films')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) {
-        console.error('Supabase Error:', error);
-        return;
-      }
-      
-      if (data) {
-        setFilms(data);
-        setFilteredFilms(data);
-      }
-    } catch (err) {
-      console.error('Fetch Error:', err);
+  const mockFilms = [
+    {
+      id: '1',
+      title: 'Digital Dreams',
+      creator: 'Sarah Chen',
+      thumbnail_url: 'https://picsum.photos/400/225?random=1',
+      duration: '3:42',
+      description: 'Ein surrealer Kurzfilm über KI-generierte Träume und die Grenzen zwischen Realität und digitaler Fantasie.',
+      ai_tools: ['Runway ML', 'MidJourney', 'ElevenLabs'],
+      category: 'Abstract',
+      views: 2340,
+      featured: true,
+      uploadDate: '2024-01-15'
+    },
+    {
+      id: '2',
+      title: 'Synthetic Memories',
+      creator: 'Alex Rivera',
+      thumbnail_url: 'https://picsum.photos/400/225?random=2',
+      duration: '5:18',
+      description: 'Eine poetische Reise durch künstliche Erinnerungen in einer post-digitalen Welt.',
+      ai_tools: ['Pika Labs', 'Stable Video', 'Adobe Firefly'],
+      category: 'Sci-Fi',
+      views: 1876,
+      featured: true,
+      uploadDate: '2024-01-20'
+    },
+    {
+      id: '3',
+      title: 'The Last Algorithm',
+      creator: 'Maya Patel',
+      thumbnail_url: 'https://picsum.photos/400/225?random=3',
+      duration: '7:23',
+      description: 'Science Fiction Drama über die letzte KI und ihre Beziehung zur Menschheit.',
+      ai_tools: ['Sora', 'Claude', 'DALL-E 3'],
+      category: 'Sci-Fi',
+      views: 3421,
+      featured: true,
+      uploadDate: '2024-01-12'
+    },
+    {
+      id: '4',
+      title: 'Fractal Emotions',
+      creator: 'Jin Watanabe',
+      thumbnail_url: 'https://picsum.photos/400/225?random=4',
+      duration: '4:15',
+      description: 'Abstrakte Visualisierung menschlicher Emotionen durch KI-generierte Fraktale.',
+      ai_tools: ['MidJourney', 'Runway ML'],
+      category: 'Abstract',
+      views: 1654,
+      featured: false,
+      uploadDate: '2024-01-25'
+    },
+    {
+      id: '5',
+      title: 'AI Evolution Documentary',
+      creator: 'Emma Thompson',
+      thumbnail_url: 'https://picsum.photos/400/225?random=5',
+      duration: '12:30',
+      description: 'Dokumentation über die Entwicklung der KI-Technologie in der Filmproduktion.',
+      ai_tools: ['Runway ML', 'Pika Labs', 'Sora'],
+      category: 'Documentary',
+      views: 5632,
+      featured: false,
+      uploadDate: '2024-01-08'
+    },
+    {
+      id: '6',
+      title: 'Neon Dreams',
+      creator: 'Carlos Mendez',
+      thumbnail_url: 'https://picsum.photos/400/225?random=6',
+      duration: '6:42',
+      description: 'Cyberpunk-inspirierte Animation über eine futuristische Stadtlandschaft.',
+      ai_tools: ['Stable Video', 'MidJourney'],
+      category: 'Animation',
+      views: 2891,
+      featured: false,
+      uploadDate: '2024-01-30'
     }
-  };
-  
-  fetchFilms();
+  ];
+  setFilms(mockFilms);
+  setFilteredFilms(mockFilms);
 }, []);
-
   // Filter-Logik
   useEffect(() => {
     let filtered = films;
