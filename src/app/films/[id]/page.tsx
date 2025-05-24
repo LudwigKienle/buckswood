@@ -20,16 +20,14 @@ interface AIFilm {
   views: number;
   featured: boolean;
   created_at: string;
-  status?: string;
 }
 
 export default function FilmDetailPage() {
   const params = useParams();
   const [film, setFilm] = useState<AIFilm | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  // Mock data that matches your homepage
+  // Mock data that works without any external dependencies
   const mockFilms: AIFilm[] = [
     {
       id: 'yoda-trailer-2024',
@@ -43,8 +41,7 @@ export default function FilmDetailPage() {
       category: 'Sci-Fi',
       views: 1250,
       featured: true,
-      created_at: '2024-12-01T10:00:00Z',
-      status: 'approved'
+      created_at: '2024-12-01T10:00:00Z'
     },
     {
       id: 'digital-dreams',
@@ -58,8 +55,7 @@ export default function FilmDetailPage() {
       category: 'Abstract',
       views: 2840,
       featured: true,
-      created_at: '2024-11-15T10:00:00Z',
-      status: 'approved'
+      created_at: '2024-11-15T10:00:00Z'
     },
     {
       id: 'synthetic-memories',
@@ -73,26 +69,17 @@ export default function FilmDetailPage() {
       category: 'Sci-Fi',
       views: 1876,
       featured: true,
-      created_at: '2024-11-20T10:00:00Z',
-      status: 'approved'
+      created_at: '2024-11-20T10:00:00Z'
     }
   ];
 
   useEffect(() => {
     const filmId = params.id as string;
     
-    // Simulate loading time
+    // Simulate loading
     setTimeout(() => {
       const foundFilm = mockFilms.find(f => f.id === filmId);
-      
-      if (foundFilm) {
-        setFilm(foundFilm);
-        // Simulate view increment
-        foundFilm.views += 1;
-      } else {
-        setError('Film not found');
-      }
-      
+      setFilm(foundFilm || null);
       setLoading(false);
     }, 500);
   }, [params.id]);
@@ -127,13 +114,11 @@ export default function FilmDetailPage() {
     );
   }
 
-  if (error || !film) {
+  if (!film) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">
-            {error || 'Film not found'}
-          </h1>
+          <h1 className="text-2xl font-bold text-white mb-4">Film not found</h1>
           <Link 
             href="/films" 
             className="inline-flex items-center text-amber-400 hover:text-amber-300 transition-colors"
@@ -146,7 +131,7 @@ export default function FilmDetailPage() {
     );
   }
 
-  // YouTube Video ID extrahieren
+  // Extract YouTube Video ID
   const getYouTubeId = (url: string) => {
     const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
     return match ? match[1] : null;
@@ -249,7 +234,7 @@ export default function FilmDetailPage() {
             {/* Description */}
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
               <h2 className="text-xl font-semibold text-white mb-4">Description</h2>
-              <p className="text-gray-300 leading-relaxed whitespace-pre-line">
+              <p className="text-gray-300 leading-relaxed">
                 {film.description}
               </p>
             </div>
@@ -263,7 +248,7 @@ export default function FilmDetailPage() {
               <div className="flex gap-4 flex-wrap">
                 <button 
                   onClick={() => shareFilm('twitter')}
-                  className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg text-white transition-colors flex items-center"
+                  className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg text-white transition-colors"
                 >
                   Twitter
                 </button>
@@ -289,7 +274,7 @@ export default function FilmDetailPage() {
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
               <h2 className="text-xl font-semibold text-white mb-4">AI Tools Used</h2>
               <div className="space-y-3">
-                {film.ai_tools?.map((tool, index) => (
+                {film.ai_tools.map((tool, index) => (
                   <div key={index} className="bg-gradient-to-r from-amber-600/20 to-amber-500/20 border border-amber-600/30 rounded-lg p-3">
                     <span className="text-amber-400 font-medium">{tool}</span>
                   </div>
@@ -297,7 +282,7 @@ export default function FilmDetailPage() {
               </div>
             </div>
 
-            {/* Category & Stats */}
+            {/* Details */}
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
               <h2 className="text-xl font-semibold text-white mb-4">Details</h2>
               <div className="space-y-3">
@@ -312,10 +297,6 @@ export default function FilmDetailPage() {
                 <div className="flex justify-between">
                   <span className="text-gray-300">Featured:</span>
                   <span className="text-white">{film.featured ? '⭐ Yes' : 'No'}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-300">Status:</span>
-                  <span className="text-green-400 capitalize">{film.status || 'approved'}</span>
                 </div>
               </div>
             </div>
