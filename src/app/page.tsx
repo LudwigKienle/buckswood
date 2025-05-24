@@ -24,9 +24,10 @@ interface AIFilm {
 export default function HomePage() {
   const [featuredFilms, setFeaturedFilms] = useState<AIFilm[]>([]);
 
-  // Mock data for now (works guaranteed)
+  // Featured films - Mix of Ludwig + Real AI filmmakers
   useEffect(() => {
-    const mockFilms = [
+    const featuredFilmsCollection = [
+      // Ludwig's original film
       {
         id: 'yoda-trailer-2024',
         title: 'Yoda - AI Generated Star Wars Trailer',
@@ -37,28 +38,62 @@ export default function HomePage() {
         ai_tools: ['Kling 1.6', 'ComfyUI', 'MidJourney'],
         featured: true
       },
+      // Real AI filmmakers
       {
-        id: 'digital-dreams',
-        title: 'Digital Dreams',
-        creator: 'Sarah Chen',
-        thumbnail_url: 'https://picsum.photos/400/225?random=1',
-        duration: '3:42',
-        description: 'A surreal short film exploring AI-generated dreams and digital worlds through stunning visuals.',
-        ai_tools: ['Runway ML', 'MidJourney'],
+        id: 'unblind-horror-short',
+        title: 'Unblind',
+        creator: 'Mark Wachholz (@Magiermogul)',
+        thumbnail_url: 'https://picsum.photos/400/225?random=101',
+        duration: '8:30',
+        description: 'A haunting AI-generated horror short about Emily, a blind girl under her mother\'s strict control. Award-winning concept trailer from Berlin-based filmmaker.',
+        ai_tools: ['ElevenLabs Voice AI', 'Runway Gen-3', 'Stable Diffusion'],
         featured: true
       },
       {
-        id: 'synthetic-memories',
-        title: 'Synthetic Memories',
-        creator: 'Alex Rivera',
-        thumbnail_url: 'https://picsum.photos/400/225?random=2',
-        duration: '5:18',
-        description: 'A poetic journey through artificial memories in a digital future, blending technology with emotion.',
-        ai_tools: ['Pika Labs', 'Stable Video'],
+        id: 'lord-rings-ai-trailer',
+        title: 'Lord of the Rings - AI Trailer',
+        creator: 'Caleb Ward (@Curious Refuge)',
+        thumbnail_url: 'https://picsum.photos/400/225?random=104',
+        duration: '2:15',
+        description: 'Viral AI-generated trailer reimagining Lord of the Rings. From Hollywood\'s go-to AI expert with work featured by Netflix, Sony, and Adobe.',
+        ai_tools: ['ElevenLabs', 'Runway Gen-3', 'MidJourney'],
+        featured: true
+      },
+      {
+        id: 'born-of-coven-trailer',
+        title: 'Born of the Coven',
+        creator: 'Kavan Cardoza (@kavanthekid)',
+        thumbnail_url: 'https://picsum.photos/400/225?random=105',
+        duration: '1:45',
+        description: 'Dark, mysterious AI trailer created in just one hour using Runway Gen-3. From award-winning photographer with millions of views across platforms.',
+        ai_tools: ['Runway Gen-3 Alpha', 'Adobe After Effects'],
+        featured: true
+      },
+      {
+        id: 'democratizing-synthiola',
+        title: 'Democratizing Synthiola',
+        creator: 'Fabian Mosele (@fabianmosele)',
+        thumbnail_url: 'https://picsum.photos/400/225?random=107',
+        duration: '18:30',
+        description: 'A synthetic love story exploring authenticity and consent in the era of generative AI. Features the creator\'s AI alter ego "Synthiola" in a critical examination of AI ethics.',
+        ai_tools: ['Stable Diffusion', 'AnimateDiff', 'Runway Gen-3 Alpha', 'ElevenLabs'],
+        featured: true
+      },
+      {
+        id: 'dear-mom-ai-letter',
+        title: 'Dear Mom',
+        creator: 'AIFF 2024 Winner',
+        thumbnail_url: 'https://picsum.photos/400/225?random=110',
+        duration: '5:30',
+        description: 'A heartfelt letter from daughter to mother, imagining meeting her mom at age 20. Winner of Runway AI Film Festival 2024 - a touching exploration of unconditional love.',
+        ai_tools: ['Runway Gen-3', 'ElevenLabs', 'Stable Diffusion'],
         featured: true
       }
     ];
-    setFeaturedFilms(mockFilms);
+    
+    // Show random 3 featured films each time
+    const shuffled = featuredFilmsCollection.sort(() => 0.5 - Math.random());
+    setFeaturedFilms(shuffled.slice(0, 3));
   }, []);
 
   return (
@@ -168,23 +203,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Stats Section */}
+      {/* Stats Section - Updated with real data */}
       <section className="py-16 bg-gradient-to-r from-black/20 to-black/10 border-y border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
               <Film className="w-12 h-12 text-amber-400 mb-4 mx-auto" />
-              <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">50+</h3>
+              <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">85+</h3>
               <p className="text-gray-300">Curated AI Films</p>
             </div>
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
               <Users className="w-12 h-12 text-amber-400 mb-4 mx-auto" />
-              <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">25+</h3>
+              <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">45+</h3>
               <p className="text-gray-300">Creative Artists</p>
             </div>
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10">
               <Award className="w-12 h-12 text-amber-400 mb-4 mx-auto" />
-              <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">12+</h3>
+              <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">25+</h3>
               <p className="text-gray-300">Countries Represented</p>
             </div>
           </div>
