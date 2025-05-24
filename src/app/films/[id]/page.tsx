@@ -82,7 +82,7 @@ export default function FilmDetailPage() {
       setFilm(foundFilm || null);
       setLoading(false);
     }, 500);
-  }, [params.id]);
+  }, [params.id, mockFilms]);
 
   const shareFilm = async (platform: string) => {
     const url = window.location.href;
@@ -99,7 +99,7 @@ export default function FilmDetailPage() {
         try {
           await navigator.clipboard.writeText(url);
           alert('Link copied!');
-        } catch (err) {
+        } catch {
           alert(`Link: ${url}`);
         }
         break;
